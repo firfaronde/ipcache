@@ -52,7 +52,7 @@ async function getIpInfo(ip) {
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send('Something broke!');
+    res.status(500).json({ status: 'failed', message: err.message });
 });
 
 app.listen(port, () => {
