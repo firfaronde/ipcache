@@ -6,7 +6,7 @@ cachedIps = new Map();
 
 app.use(express.json());
 
-app.get('/ip/:ip', (req, res) => {
+app.get('/ip/:ip', async (req, res) => {
     const ip = req.params.ip;
 
     if (cachedIps.has(ip)) {
