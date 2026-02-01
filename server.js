@@ -47,7 +47,28 @@ app.get('/clear-cache', (req, res) => {
 });
 
 async function getIpInfo(ip) {
-    return fetch('http://ip-api.com/json/' + ip + '?fields=17023488').then(response => response.json());
+    try {
+        const resp = await fetch('http://ip-api.com/json/' + ip + '?fields=17023488');
+
+        if (!resp.ok) {
+            return { status: 'failed', message: 'bad status ' + resp.status };
+        }
+
+        const text = await resp.text();
+
+        if (!text) {
+            return { status: 'failed', message: 'empty body' };
+        }
+
+        try {
+            return JSON.parse(text);
+        } catch {
+            return { status: 'failed', message: 'invalid json' };
+        }
+
+    } catch (err) {
+        return { status: 'failed', message: err.message };
+    }
 }
 
 app.use((err, req, res, next) => {
